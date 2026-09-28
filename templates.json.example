@@ -1,0 +1,28 @@
+{
+  "default": [
+    {
+      "aktivitas": "Melakukan pengerjaan tugas rutin pengembangan modul aplikasi web magang, meninjau alur fungsionalitas sistem, serta melakukan refactoring kode untuk meningkatkan efisiensi proses.",
+      "pembelajaran": "Mempelajari integrasi komponen backend dengan arsitektur RESTful API, memahami pola penanganan error yang baik, serta penerapan best practice dalam penulisan kode yang bersih.",
+      "kendala": "Tidak ada kendala yang menghambat jalannya pengerjaan hari ini, seluruh aktivitas teknis dan alur komunikasi tim berjalan dengan lancar dan sesuai target."
+    },
+    {
+      "aktivitas": "Melakukan penelusuran issue pada sistem, melakukan unit testing terhadap endpoint yang baru diimplementasikan, serta memastikan dokumentasi teknis selaras dengan implementasi terkini.",
+      "pembelajaran": "Mendalami teknik debugging dan pengujian otomatis untuk memastikan stabilitas fitur, serta memahami struktur pengelolaan data yang optimal pada sistem berskala besar.",
+      "kendala": "Terdapat sedikit penyesuaian pada dependensi library pihak ketiga, namun kendala tersebut berhasil diatasi setelah melakukan sinkronisasi konfigurasi lingkungan pengembangan."
+    }
+  ],
+  "Monday": [
+    {
+      "aktivitas": "Mengikuti rapat koordinasi awal pekan (weekly planning) bersama tim pembimbing dan pengembang, menyusun daftar prioritas pengerjaan tugas mingguan, serta memulai pengerjaan backlog fitur utama.",
+      "pembelajaran": "Memahami alur perencanaan sprint, pembagian beban kerja tim, serta penyelarasan target milestone proyek magang untuk satu pekan ke depan secara terstruktur.",
+      "kendala": "Tidak ada kendala berarti pada hari ini, proses sinkronisasi tugas dan pemahaman requirement fitur baru dapat dipahami dengan sangat jelas."
+    }
+  ],
+  "Friday": [
+    {
+      "aktivitas": "Melakukan evaluasi hasil pekerjaan mingguan (weekly review), merapikan repository kode melalui pull request, serta melakukan deployment pengujian ke lingkungan staging internal.",
+      "pembelajaran": "Memahami proses deployment, version control branching strategy, dan verifikasi akhir fungsionalitas sebelum fitur dirilis ke tahap review lebih lanjut.",
+      "kendala": "Tidak ada kendala yang mengganggu aktivitas hari ini, seluruh pekerjaan mingguan berhasil diselesaikan tepat waktu sesuai rencana."
+    }
+  ]
+}

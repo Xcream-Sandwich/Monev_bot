@@ -1,0 +1,21 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Sensitive data & local state files
+.env
+users_store.json
+daily_points.json
+auto_state.json
+evening_state.json
+submit_history.json
+templates.json
