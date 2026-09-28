@@ -139,3 +139,53 @@ async def test_get_home_status_and_submit(monkeypatch):
     )
     assert result["success"] is True
     assert result["status_code"] == 201
+
+
+@pytest.mark.asyncio
+async def test_login_monev_step1_plaintext_201(monkeypatch):
+    """Test Step 1 when API returns HTTP 201 with plain-text URL body (real-world behavior)."""
+    class MockTransport(httpx.AsyncBaseTransport):
+        async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
+            url_str = str(request.url)
+
+            # Step 1: returns 201 with plain-text URL (real Monev behavior)
+            if "monev-api.maganghub.kemnaker.go.id/api/v1/auth/login" in url_str and "callback" not in url_str:
+                sso_url = "https://account.kemnaker.go.id/auth?client_id=79230891-cc02-43c8-964c-b525bce27857&redirect_uri=https%3A%2F%2Fmonev.maganghub.kemnaker.go.id%2Fsso%2Fcallback&response_type=code&scope=basic+email&state=teststate123"
+                return httpx.Response(
+                    201,
+                    text=sso_url,
+                    headers={
+                        "content-type": "text/plain; charset=utf-8",
+                        "set-cookie": "monev_oauth_state=teststate123; Path=/; Max-Age=600; HttpOnly; Secure; SameSite=Lax",
+                    },
+                )
+
+            # Step 2: GET SSO page
+            if "account.kemnaker.go.id/auth" in url_str and "login" not in url_str:
+                html_body = '<html><head><meta name="csrf-token" content="mock-csrf-token-99"></head></html>'
+                return httpx.Response(200, text=html_body, headers={"content-type": "text/html"})
+
+            # Step 3: POST /auth/login
+            if "account.kemnaker.go.id/auth/login" in url_str:
+                return httpx.Response(
+                    200,
+                    json={"data": {"redirect_uri": "https://monev-api.maganghub.kemnaker.go.id/api/v1/auth/login/callback?code=auth_code&state=teststate123"}},
+                )
+
+            # Step 4: GET callback
+            if "api/v1/auth/login/callback" in url_str:
+                return httpx.Response(
+                    200,
+                    json={"data": {"access_token": "plaintext-201-token"}},
+                )
+
+            return httpx.Response(404)
+
+    def mock_client_factory(*args, **kwargs):
+        kwargs["transport"] = MockTransport()
+        return _orig_async_client(*args, **kwargs)
+
+    monkeypatch.setattr("monev_auth.httpx.AsyncClient", mock_client_factory)
+
+    token = await login_monev("user@test.com", "mypassword")
+    assert token == "plaintext-201-token"

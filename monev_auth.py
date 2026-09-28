@@ -48,6 +48,7 @@ async def login_monev(email: str, password: str) -> str:
             if resp1.status_code in (301, 302, 303, 307, 308) and "location" in resp1.headers:
                 sso_url = resp1.headers["location"]
             elif resp1.is_success or resp1.status_code in (200, 201):
+                # Try JSON first
                 try:
                     data = resp1.json()
                     if isinstance(data, dict):
@@ -62,13 +63,22 @@ async def login_monev(email: str, password: str) -> str:
                             or inner_data.get("redirect_url")
                             or inner_data.get("redirect_uri")
                         )
+                    elif isinstance(data, str) and data.strip().startswith("http"):
+                        sso_url = data.strip()
                 except Exception:
                     pass
+                # Fallback: body is plain-text URL (Content-Type: text/plain)
+                if not sso_url:
+                    body_text = resp1.text.strip()
+                    if body_text.startswith("http"):
+                        sso_url = body_text
+                # Fallback: Location header
                 if not sso_url and "location" in resp1.headers:
                     sso_url = resp1.headers["location"]
             
             if not sso_url:
                 raise MonevAuthError(f"[Step 1] Gagal mendapatkan URL SSO dari Monev API (HTTP {resp1.status_code})")
+            logger.debug("Step 1 OK – SSO URL obtained (HTTP %s)", resp1.status_code)
         except httpx.RequestError as e:
             raise MonevAuthError(f"[Step 1] Kesalahan koneksi ke Monev API: {type(e).__name__}")
         
