@@ -1,0 +1,30 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/warn",
+      "schedule": "0 9 * * 1-5"
+    },
+    {
+      "path": "/api/cron/submit",
+      "schedule": "0 10 * * 1-5"
+    },
+    {
+      "path": "/api/cron/evening",
+      "schedule": "0 12 * * 1-5"
+    }
+  ],
+  "functions": {
+    "api/telegram.py": {
+      "maxDuration": 25
+    },
+    "api/cron/warn.py": {
+      "maxDuration": 30
+    },
+    "api/cron/submit.py": {
+      "maxDuration": 30
+    },
+    "api/cron/evening.py": {
+      "maxDuration": 30
+    }
+  }
+}
